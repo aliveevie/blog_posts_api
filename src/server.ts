@@ -19,9 +19,16 @@ app.post('/',  async (req: Request, res: Response) => {
    //const result = db.query('INSERT INTO blog_posts(title, content, author) VALUES($1, $2, $3)', 
    
    //[title, post, author]);
-   const result = await db.query('SELECT * FROM "public".blog_posts;');
-   console.log(result);
+   const result = await db.query('INSERT INTO blog_posts(title, content, author) VALUES($1, $2, $3)', 
+   
+   [title, post, author])
+   .then(() => res.send("Post Successfully!"));
 });
+
+app.get('/posts', async (req: Request, res: Response) => {
+    const data = await db.query('SELECT * FROM blog_posts')
+    res.json(data.rows);
+})
 
 
 
