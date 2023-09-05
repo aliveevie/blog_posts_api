@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <link href="./index.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Write Your Blog Post</h1>
+        
+        <form class="blog-form" action="/post">
+            <label for="name" class="form-label">Name</label>
+            <input  type="text" id="post-title" class="form-input" placeholder="Enter your name"/>
+            <label for="post-title" class="form-label">Title</label>
+            <input type="text" id="post-title" class="form-input" placeholder="Enter the title of your blog post" required>
+
+            <label for="post-content" class="form-label">Content</label>
+            <textarea id="post-content" class="form-textarea" placeholder="Write your blog post content" rows="8" required></textarea>
+
+            <button type="submit" class="button">Post</button>
+        </form>
+    </div>
+</body>
+</html>
