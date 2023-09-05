@@ -31,17 +31,23 @@ app.get('/posts', async (req: Request, res: Response) => {
 });
 
 
-app.get('/tables', async ( req:Request, res:Response ) => {
-   
-// Define the SQL statements
-    const result = await db.query( 
-`
-    ALTER TABLE IF EXISTS blog_posts
-    ADD COLUMN IF NOT EXISTS user_id INT REFERENCES users(user_id);
-`);
-console.log(result);
-   
-})
+app.get('/specific/:title', async ( req:Request, res:Response ) => {
+   // Define the SQL statements
+    const { title } = req.params
+    const { author } = req.query
+    
+    const result = await db.query(`SELECT title, content, author 
+    FROM blog_posts 
+    JOIN users ON 
+    blog_posts.user_id = users.user_id 
+    WHERE title='${title}' OR author='${author}';`);
+    if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Rows do not exist' });
+      }else{
+        res.json(result.rows)
+        return
+      }
+});
 
 app.listen(port, () => {
     console.log(`server started on port ${port}`);

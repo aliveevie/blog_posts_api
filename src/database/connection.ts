@@ -1,14 +1,29 @@
-import dotenv from 'dotenv';
-dotenv.config();
-const { Pool } =  require('pg');
+import { Client } from 'pg';
+const dotenv = require('dotenv')
+dotenv.config()
 
+const conString = process.env.STRING; // Replace with your actual database connection string
 
-const pool = new Pool({
-    connectionString: process.env.STRING
+const client = new Client({
+  connectionString: conString,
 });
 
-pool
-    .connect()
-    .then(() => console.log('Connection is Successful!'));
+client.connect()
+  .then(() => {
+    console.log('Connected to PostgreSQL');
 
-module.exports = pool;
+    // Run your queries here
+    client.query('SELECT NOW() AS "theTime"')
+      .then((result) => {
+        console.log(result.rows[0].theTime);
+      })
+      .catch((err) => {
+        console.error('Error running query', err);
+      })
+      
+  })
+  .catch((err) => {
+    console.error('Could not connect to PostgreSQL', err);
+  });
+
+module.exports = client;

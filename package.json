@@ -23,6 +23,7 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@types/pg": "^8.10.2",
     "fs-extra": "^11.1.1"
   }
 }
