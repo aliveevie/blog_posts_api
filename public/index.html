@@ -10,14 +10,19 @@
     <div class="container">
         <h1>Write Your Blog Post</h1>
         
-        <form class="blog-form" action="/post">
+        <form class="blog-form" action="/" method="post" >
             <label for="name" class="form-label">Name</label>
-            <input  type="text" id="post-title" class="form-input" placeholder="Enter your name"/>
+            <input  type="text" id="post-title" class="form-input" placeholder="Enter your name" 
+            name="author" required/>
             <label for="post-title" class="form-label">Title</label>
-            <input type="text" id="post-title" class="form-input" placeholder="Enter the title of your blog post" required>
+            <input type="text" id="post-title" class="form-input" placeholder="Enter the title of your blog post"   
+            name="title"
+            required>
 
             <label for="post-content" class="form-label">Content</label>
-            <textarea id="post-content" class="form-textarea" placeholder="Write your blog post content" rows="8" required></textarea>
+            <textarea id="post-content" class="form-textarea" placeholder="Write your blog post content" rows="8" required
+            name="post"
+            ></textarea>
 
             <button type="submit" class="button">Post</button>
         </form>
