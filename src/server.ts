@@ -67,7 +67,6 @@ app.get('/specific/:title', async ( req:Request, res:Response ) => {
    // Define the SQL statements
     const { title } = req.params
     const { author } = req.query
-    
     const result = await db.query(`SELECT title, content, author 
     FROM blog_posts 
     JOIN users ON 
@@ -98,6 +97,22 @@ app.post('/delete', async (req:Request, res:Response) => {
         res.json({delete:'Delete Success!'})
         return
       }
+});
+
+app.post('/edit', async ( req: Request, res:Response) => {
+    try{
+        const { title, post } = req.body
+        const result = await db.query('SELECT post_id FROM blog_posts WHERE title=$1', 
+        [title])
+        const post_id = result.rows[0].post_id
+
+        const update = await db.query('UPDATE blog_posts SET content=$2 WHERE post_id=$1', 
+        [post_id, post])
+        .then((res.json({data:"Update is Successful!"})))
+    }
+    catch{
+        res.send(404).json({data:"Error Updating details please!"})
+    }
 });
 
 

@@ -11,11 +11,16 @@
         <h1>Edit your Post Here</h1>
         <p>How to Edit your post</p>
         <p>Enter the title of the post to Edit</p>
+      
      <form class="blog-form" action="/edit" method="post" >
         <label for="post-title" class="form-label">Title</label>
-        <input type="text" id="post-title" class="form-input" placeholder="Enter the title of your blog post to Edit"   
+        <input 
+        type="text" id="post-title" class="form-input" 
+        placeholder="Enter the title of your blog post to Edit"   
         name="title"
-        required>
+        required />
+        <p id="noexist"  ></p>
+        <p id="fetch-button" class="button">Click to Fetch Post to Edit</p>
         <label for="post-content" class="form-label">Edit Content</label>
         <textarea id="post-content" class="form-textarea" rows="8" required
         name="post" 
@@ -23,5 +28,44 @@
         <button type="submit" class="button">Post</button>
     </form>
 </div>
+<script>
+    const elementTextarea = document.getElementById('post-content');
+    const buttonElement = document.getElementById('fetch');
+    const textElement = document.getElementById('noexist');
+
+    async function data(){
+    
+    const titleValue = document.getElementById('post-title');
+    const title = titleValue.value
+    const response = await fetch('/blogs');
+    const data = await response.json();
+    let found = false;
+    data.forEach((result) => {
+        if(result.title===title){
+            let value = result.content;
+            found = true;
+            elementTextarea.value = value;
+        }
+    });
+
+    if(!found){
+        
+            textElement.textContent = 'Title do not exist';
+            
+            // Remove the message after a 1-second delay
+            setTimeout(() => {
+                textElement.textContent = null;
+            }, 1000);
+    }
+
+   
+    // Display the "Title do not exist" message
+    
+
+    }
+    
+    document.addEventListener('click', data)
+   
+</script>
 </body>
 </html>
