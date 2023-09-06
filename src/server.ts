@@ -31,9 +31,19 @@ app.post('/add',  async (req: Request, res: Response) => {
     .then(() => res.json({post:"Post Successfully!"}));
 });
 
-app.get('/posts', async (req: Request, res: Response) => {
-    const data = await db.query('SELECT * FROM blog_posts')
-    res.json(data.rows);
+app.get('/posts/', async (req: Request, res: Response) => {
+    const page = Number(req.query.page) || 1
+    const title = req.query.title
+    const author = req.query.author
+    const itemsPerPage = 20;
+    const offset:number = (page - 1) * itemsPerPage
+    const data = await db.query('SELECT * FROM blog_posts WHERE title=$1 OR author=$2 LIMIT $3 OFFSET $3',
+    [title, author, itemsPerPage, offset]);
+    if(data.rows.length===0){
+       return res.status(401).json({data:'Title or Author does not exist'})
+    }else{
+        res.json(data.rows)
+    }
 });
 
 
@@ -73,8 +83,6 @@ app.post('/delete', async (req:Request, res:Response) => {
         return
       }
 });
-
-
 
 
 app.listen(port, () => {
