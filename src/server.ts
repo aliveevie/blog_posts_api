@@ -57,6 +57,11 @@ app.get('/posts/', async (req: Request, res: Response) => {
   
 });
 
+app.get('/blogs', async (req:Request, res:Response) => {
+    const data = await db.query('SELECT * FROM blog_posts')
+    res.json(data.rows);
+    return;
+});
 
 app.get('/specific/:title', async ( req:Request, res:Response ) => {
    // Define the SQL statements
