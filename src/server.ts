@@ -55,12 +55,23 @@ app.get('/specific/:title', async ( req:Request, res:Response ) => {
       }
 });
 
-
 app.post('/sign', async (req:Request, res:Response) => {
     const { username, email } = req.body
     const result = await db.query('INSERT INTO users(username, email) VALUES($1, $2)', 
     [username, email])
     .then(() =>  res.redirect('/add.html'))
+});
+
+app.post('/delete', async (req:Request, res:Response) => {
+    const { title } = req.body
+    const result = await db.query('DELETE FROM blog_posts WHERE title=$1', 
+    [title]);
+    if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Title do not exist' });
+      }else{
+        res.json({delete:'Delete Success!'})
+        return
+      }
 });
 
 
