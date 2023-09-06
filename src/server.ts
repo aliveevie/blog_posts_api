@@ -37,34 +37,16 @@ app.get('/posts/', async (req: Request, res: Response) => {
     const author = req.query.author
     const itemsPerPage = 20;
     const offset:number = (page - 1) * itemsPerPage
+    console.log(author)
     try {
-          
-        if(!page){
-            const data = await db.query('SELECT * FROM blog_posts')
-            res.json(data.rows);
-            return;
-        }
-        if(page){
-            const data = await db.query('SELECT * FROM blog_posts LIMIT $1 OFFSET $2',
-            [itemsPerPage, offset])
-            res.json(data.rows);
-            return;
-        }
-        if(title){
-            const data = await db.query('SELECT * FROM blog_posts WHERE title=$1 LIMIT $2 OFFSET $3',
-            [title, itemsPerPage, offset])
-            res.json(data.rows);
-            return;
-        }
-        if(author){
-            const data = await db.query('SELECT * FROM blog_posts WHERE author=$1 LIMIT $2 OFFSET $3',
-            [author, itemsPerPage, offset])
-            res.json(data.rows);
-            return;
-        }
-        if(title && author){
-            const data = await db.query('SELECT * FROM blog_posts WHERE  title=$1 AND author=$2 LIMIT $3 OFFSET $4',
+        if(title || author ){
+            const data = await db.query('SELECT * FROM blog_posts WHERE title=$1 OR author=$2 LIMIT $3 OFFSET $4',
             [title, author, itemsPerPage, offset])
+            res.json(data.rows);
+            return;
+        }else{
+            const data = await db.query('SELECT * FROM blog_posts',
+            )
             res.json(data.rows);
             return;
         }
