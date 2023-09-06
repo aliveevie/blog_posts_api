@@ -4,7 +4,8 @@ const db = require('./database/connection')
 const app = express();
 const port = 3000;
 const path = require('path');
-app.use(urlencoded({ extended: true }));
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
@@ -13,16 +14,21 @@ app.get('/', ( req: Request, res: Response ) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/',  async (req: Request, res: Response) => {
+app.post('/add',  async (req: Request, res: Response) => {
    const { author, title, post } = req.body;
-    
-   //const result = db.query('INSERT INTO blog_posts(title, content, author) VALUES($1, $2, $3)', 
+    const id = await db.query('SELECT user_id FROM users WHERE username = $1', [author])
+    console.log(id)
+    if(!id){
+        res.json({user:"Not Found!"})
+        return
+    }
+    const user_id = id.rows[0].user_id
+  
+  
+    const result = await db.query('INSERT INTO blog_posts(title, content, author, user_id) VALUES($1, $2, $3, $4)', 
    
-   //[title, post, author]);
-   const result = await db.query('INSERT INTO blog_posts(title, content, author) VALUES($1, $2, $3)', 
-   
-   [title, post, author])
-   .then(() => res.send("Post Successfully!"));
+    [title, post, author, user_id])
+    .then(() => res.json({post:"Post Successfully!"}));
 });
 
 app.get('/posts', async (req: Request, res: Response) => {
@@ -48,6 +54,17 @@ app.get('/specific/:title', async ( req:Request, res:Response ) => {
         return
       }
 });
+
+
+app.post('/sign', async (req:Request, res:Response) => {
+    const { username, email } = req.body
+    const result = await db.query('INSERT INTO users(username, email) VALUES($1, $2)', 
+    [username, email])
+    .then(() =>  res.redirect('/add.html'))
+});
+
+
+
 
 app.listen(port, () => {
     console.log(`server started on port ${port}`);
