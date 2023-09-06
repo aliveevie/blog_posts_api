@@ -37,13 +37,43 @@ app.get('/posts/', async (req: Request, res: Response) => {
     const author = req.query.author
     const itemsPerPage = 20;
     const offset:number = (page - 1) * itemsPerPage
-    const data = await db.query('SELECT * FROM blog_posts WHERE title=$1 OR author=$2 LIMIT $3 OFFSET $3',
-    [title, author, itemsPerPage, offset]);
-    if(data.rows.length===0){
-       return res.status(401).json({data:'Title or Author does not exist'})
-    }else{
-        res.json(data.rows)
+    try {
+          
+        if(!page){
+            const data = await db.query('SELECT * FROM blog_posts')
+            res.json(data.rows);
+            return;
+        }
+        if(page){
+            const data = await db.query('SELECT * FROM blog_posts LIMIT $1 OFFSET $2',
+            [itemsPerPage, offset])
+            res.json(data.rows);
+            return;
+        }
+        if(title){
+            const data = await db.query('SELECT * FROM blog_posts WHERE title=$1 LIMIT $2 OFFSET $3',
+            [title, itemsPerPage, offset])
+            res.json(data.rows);
+            return;
+        }
+        if(author){
+            const data = await db.query('SELECT * FROM blog_posts WHERE author=$1 LIMIT $2 OFFSET $3',
+            [author, itemsPerPage, offset])
+            res.json(data.rows);
+            return;
+        }
+        if(title && author){
+            const data = await db.query('SELECT * FROM blog_posts WHERE  title=$1 AND author=$2 LIMIT $3 OFFSET $4',
+            [title, author, itemsPerPage, offset])
+            res.json(data.rows);
+            return;
+        }
     }
+    catch{
+        res.json({error:'Error Invalid Details!'})
+    }
+   
+  
 });
 
 
