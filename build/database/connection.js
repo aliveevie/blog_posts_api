@@ -1,18 +1,25 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const { Pool } = require('pg');
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    password: process.env.PASSWORD,
-    port: 5432 // The default postgres SQL
+const pg_1 = require("pg");
+const dotenv = require('dotenv');
+dotenv.config();
+const conString = process.env.STRING; // Replace with your actual database connection string
+const client = new pg_1.Client({
+    connectionString: conString,
 });
-pool
-    .connect()
-    .then(() => console.log('Connection is Successful!'));
-module.exports = pool;
+client.connect()
+    .then(() => {
+    console.log('Connected to PostgreSQL');
+    // Run your queries here
+    client.query('SELECT NOW() AS "theTime"')
+        .then((result) => {
+        console.log(result.rows[0].theTime);
+    })
+        .catch((err) => {
+        console.error('Error running query', err);
+    });
+})
+    .catch((err) => {
+    console.error('Could not connect to PostgreSQL', err);
+});
+module.exports = client;

@@ -103,15 +103,15 @@ app.post('/edit', async ( req: Request, res:Response) => {
     try{
         const { title, post } = req.body
         const result = await db.query('SELECT post_id FROM blog_posts WHERE title=$1', 
-        [title])
-        const post_id = result.rows[0].post_id
+        [title]);
+        const post_id = result.rows[0].post_id;
 
         const update = await db.query('UPDATE blog_posts SET content=$2 WHERE post_id=$1', 
         [post_id, post])
-        .then((res.json({data:"Update is Successful!"})))
+        .then((res.json({data:"Update is Successful!"})));
     }
     catch{
-        res.send(404).json({data:"Error Updating details please!"})
+        res.send(404).json({data:"Error Updating details please!"});
     }
 });
 
