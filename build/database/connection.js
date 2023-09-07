@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
 const dotenv = require('dotenv');
 dotenv.config();
-const conString = 'postgres://zuadfxiv:M6XzYNbbcPoVKPcNlZKj6xPYePYknL9r@dpg-cjsp9im3m8ac73es0up0-a.oregon-postgres.render.com/zuadfxiv'// Replace with your actual database connection string
+const conString = process.env.STRING
 const client = new pg_1.Client({
     connectionString: conString,
 });
