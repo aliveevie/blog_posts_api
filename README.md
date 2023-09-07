@@ -46,8 +46,8 @@ You can access the website and view the blog posts at https://blog-post-api-t5u8
 ## Database Configuration
 
 create a .env in the root of the project
-    ```bash
-    STRING='postgres://yourusername:yourpassword@trumpet.db.elephantsql.com/yourusername'
+   STRING='postgres://yourusername:yourpassword@trumpet.db.elephantsql.com/yourusername'
+
 
 
 ## Start the Node server
