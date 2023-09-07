@@ -1,20 +1,23 @@
-import { urlencoded } from 'body-parser';
-import express, { Request, Response} from 'express'
+import express, { Request, Response, Router} from 'express'
 const db = require('./database/connection')
 const app = express();
 const port = 3000;
 const path = require('path');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+import serverless from 'serverless-http';
+const router = Router();
+
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use(express.static('public'));
 
-app.get('/', ( req: Request, res: Response ) => {
-   
+router.get('/', ( req: Request, res: Response ) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/add',  async (req: Request, res: Response) => {
+
+router.post('/add',  async (req: Request, res: Response) => {
    const { author, title, post } = req.body;
     const id = await db.query('SELECT user_id FROM users WHERE username = $1', [author])
     console.log(id)
@@ -31,7 +34,7 @@ app.post('/add',  async (req: Request, res: Response) => {
     .then(() => res.json({post:"Post Successfully!"}));
 });
 
-app.get('/posts/', async (req: Request, res: Response) => {
+router.get('/posts/', async (req: Request, res: Response) => {
     const page = Number(req.query.page) || 1
     const title = req.query.title
     const author = req.query.author
@@ -57,13 +60,13 @@ app.get('/posts/', async (req: Request, res: Response) => {
   
 });
 
-app.get('/blogs', async (req:Request, res:Response) => {
+router.get('/blogs', async (req:Request, res:Response) => {
     const data = await db.query('SELECT * FROM blog_posts')
     res.json(data.rows);
     return;
 });
 
-app.get('/specific/:title', async ( req:Request, res:Response ) => {
+router.get('/specific/:title', async ( req:Request, res:Response ) => {
    // Define the SQL statements
     const { title } = req.params
     const { author } = req.query
@@ -80,14 +83,14 @@ app.get('/specific/:title', async ( req:Request, res:Response ) => {
       }
 });
 
-app.post('/sign', async (req:Request, res:Response) => {
+router.post('/sign', async (req:Request, res:Response) => {
     const { username, email } = req.body
     const result = await db.query('INSERT INTO users(username, email) VALUES($1, $2)', 
     [username, email])
     .then(() =>  res.redirect('/add.html'))
 });
 
-app.post('/delete', async (req:Request, res:Response) => {
+router.post('/delete', async (req:Request, res:Response) => {
     const { title } = req.body
     const result = await db.query('DELETE FROM blog_posts WHERE title=$1', 
     [title]);
@@ -99,7 +102,7 @@ app.post('/delete', async (req:Request, res:Response) => {
       }
 });
 
-app.post('/edit', async ( req: Request, res:Response) => {
+router.post('/edit', async ( req: Request, res:Response) => {
     try{
         const { title, post } = req.body
         const result = await db.query('SELECT post_id FROM blog_posts WHERE title=$1', 
@@ -115,7 +118,7 @@ app.post('/edit', async ( req: Request, res:Response) => {
     }
 });
 
+app.use('/', router);
 
-app.listen(port, () => {
-    console.log(`server started on port ${port}`);
-});
+
+export const handler = serverless(app);
