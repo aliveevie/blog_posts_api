@@ -92,3 +92,46 @@ a:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+/* Style for the footer container */
+.footer-icons,
+.footer-phone {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Separate the footer from the content */
+}
+
+/* Style for the Font Awesome icons */
+.footer-icons a {
+    margin-right: 20px; /* Add some space between icons */
+    color: #333; /* Change icon color */
+    font-size: 24px; /* Adjust icon size */
+    text-decoration: none;
+}
+
+/* Style for the phone number label */
+.phone-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Style for the phone number */
+.phone-number {
+    font-size: 18px;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+   /* Make the container take up the full viewport height */
+}
+
+/* Your existing styles for icons, phone number, and name go here */
+
+/* Optional: Add margin or spacing to the elements */
+.footer-icons,
+.footer-name {
+    margin: 10px;
+}

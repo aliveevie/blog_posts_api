@@ -22,4 +22,5 @@ client.connect()
     .catch((err) => {
     console.error('Could not connect to PostgreSQL', err);
 });
+
 module.exports = client;
