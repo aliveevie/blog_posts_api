@@ -31,18 +31,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
 const express_1 = __importStar(require("express"));
 const db = require('./database/connection');
 const app = (0, express_1.default)();
 const port = 3000;
 const path = require('path');
 const bodyParser = require('body-parser');
-const serverless_http_1 = __importDefault(require("serverless-http"));
 const router = (0, express_1.Router)();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express_1.default.static('public'));
@@ -134,4 +129,6 @@ router.post('/edit', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 }));
 app.use('/', router);
-exports.handler = (0, serverless_http_1.default)(app);
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
+});
