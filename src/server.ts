@@ -20,18 +20,18 @@ router.get('/', ( req: Request, res: Response ) => {
 router.post('/add',  async (req: Request, res: Response) => {
    const { author, title, post } = req.body;
     const id = await db.query('SELECT user_id FROM users WHERE username = $1', [author])
-    console.log(id)
-    if(!id){
-        res.json({user:"Not Found!"})
-        return
-    }
+  
+    if (id.rows.length === 0) {
+        return res.status(404).json({ error: 'User do not exist' });
+      }
+
     const user_id = id.rows[0].user_id
   
   
     const result = await db.query('INSERT INTO blog_posts(title, content, author, user_id) VALUES($1, $2, $3, $4)', 
    
     [title, post, author, user_id])
-    .then(() => res.json({post:"Post Successfully!"}));
+    .then(() => res.json({post:"Post Successfull!"}));
 });
 
 router.get('/posts/', async (req: Request, res: Response) => {
@@ -124,3 +124,5 @@ app.use('/', router);
 app.listen(4000, () => {
     console.log('Server started on port 3000')
 });
+
+export default app;
