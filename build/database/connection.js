@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
 const dotenv = require('dotenv');
 dotenv.config();
-const conString = process.env.STRING; // Replace with your actual database connection string
+const conString = 'postgres://zuadfxiv:PWtkirfzmbYIBxiyxVKEB54Ors2_V0OG@trumpet.db.elephantsql.com/zuadfxiv'; // Replace with your actual database connection string
 const client = new pg_1.Client({
     connectionString: conString,
 });
