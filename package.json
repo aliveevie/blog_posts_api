@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc && node copy.js",
-    "start": "nodemon build/src/server.js",
+    "start": "nodemon build/server.js",
     "test": "nodemon --exec 'mocha --require ts-node/register' test/**/*.ts"
   },
   "keywords": [],
