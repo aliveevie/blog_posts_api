@@ -53,8 +53,8 @@ create a .env in the root of the project
 
 
 ## Start the Node server
-```bash
-  npm run start
+    ```bash
+    npm run start
 
 The site is now live at http://localhost:4000 or your own post
 
